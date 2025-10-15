@@ -5,8 +5,8 @@ test('Conectar a MySQL y leer datos', async () => {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1234',
-    database: 'yourlsv1',
+    password: 'root',
+    database: 'yourls',
   });
 
   const [rows] = await connection.execute('SHOW TABLES;');
