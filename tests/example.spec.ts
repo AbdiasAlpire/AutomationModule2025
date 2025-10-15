@@ -5,13 +5,17 @@ test('Conectar a MySQL y leer datos', async () => {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1234',
+    password: 'root',
     database: 'yourlsv1',
+    port: 8889,
   });
 
   const [rows] = await connection.execute('SHOW TABLES;');
+
   console.log('Tablas en la base de datos:', rows);
   expect(Array.isArray(rows)).toBeTruthy();
 
   await connection.end();
 });
+
+
