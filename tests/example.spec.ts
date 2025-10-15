@@ -11,8 +11,11 @@ test('Conectar a MySQL y leer datos', async () => {
   });
 
   const [rows] = await connection.execute('SHOW TABLES;');
+
   console.log('Tablas en la base de datos:', rows);
   expect(Array.isArray(rows)).toBeTruthy();
 
   await connection.end();
 });
+
+
