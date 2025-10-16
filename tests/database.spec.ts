@@ -127,3 +127,34 @@ test('7) Should count records for each IP address correctly', async () => {
   expect(actual).toBe(expected);
 });
 
+// 8) Crear short URL y verificar en base de datos
+test('8) Should create short URL via API and verify in DB', async ({ request }) => {
+  const apiUrl = 'http://localhost:8080/yourls-api.php';
+  const params = new URLSearchParams({
+    signature: 'caed1384a5',
+    action: 'shorturl',
+    url: 'https://openai2.com',
+    keyword: 'openai2',
+    title: 'OpenAI2',
+    format: 'json',
+  });
+
+  const response = await request.get(`${apiUrl}?${params.toString()}`);
+  expect(response.ok()).toBeTruthy();
+  console.log('Status:', response.status());
+
+  const data = await response.json();
+  console.log('Response:', data);
+
+  const [rows] = await connection.execute(
+    'SELECT keyword, url, title FROM yourls_url WHERE keyword = ? AND url = ? AND title = ?',
+    ['openai2', 'https://openai2.com', 'OpenAI2']
+  );
+
+  expect((rows as any[]).length).toBeGreaterThan(0);
+  expect((rows as any[])[0]).toMatchObject({
+    keyword: 'openai2',
+    url: 'https://openai2.com',
+    title: 'OpenAI2',
+  });
+});
